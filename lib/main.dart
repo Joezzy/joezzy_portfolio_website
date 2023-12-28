@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:joezzy_web/colors.dart';
 
 import 'home.dart';
 

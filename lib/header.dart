@@ -1,69 +1,100 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:joezzy_web/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class HeaderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final nameWidget = "Joseph\nOnalo."
-        .text
-        .white
-        .xl6
-        .lineHeight(1)
-        .size(context.isMobile ? 15 : 20)
-        .bold
-        .make()
-        .shimmer();
-    return SafeArea(
-      child: VxBox(
-              child: VStack([
-        ZStack(
-          [
-            PictureWidget(),
-            Row(
-              children: [
-                VStack([
-                  if (context.isMobile) 50.heightBox else 10.heightBox,
-                  CustomAppBar().shimmer(primaryColor: Coolors.accentColor),
-                  30.heightBox,
-                  nameWidget,
-                  20.heightBox,
-                  VxBox()
-                      .color(Coolors.accentColor)
-                      .size(60, 10)
-                      .make()
-                      .px4()
-                      .shimmer(primaryColor: Coolors.accentColor),
-                  30.heightBox,
-                  SocialAccounts(),
-                ]).pSymmetric(
-                  h: context.percentWidth * 10,
-                  v: 32,
+
+
+    return Column(
+      children: [
+        ResponsiveGridRow(children: [
+          ResponsiveGridCol(
+            xs: 12,
+            xl: 6,
+              lg: 6,
+
+              child: const  PictureWidget()
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            xl: 6,
+              lg: 6,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0,
+                horizontal: 50),
+                child:   Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (!context.isMobile)
+                    const  SizedBox(height: 100,),
+                    const  Text("Hi, I'm Joseph",style: TextStyle(fontSize: 70, color: Colors.white),),
+                    const  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: const  Text(" A Software Engineer",style: TextStyle(fontSize: 30, color: Colors.white),),
+                    ),
+                    const  Text("with wealth of experience in building \n"
+                        "applications with modern tools and technologies."
+                        "\nI'm that passionate guy you need on you need on your team",style: TextStyle(fontSize: 20, color: Colors.white),),
+                       Padding(
+                      padding: const  EdgeInsets.symmetric(vertical: 20.0),
+                      child: SocialAccounts(),
+                    ),
+
+
+                     const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        children: [
+                          ActionBtn(
+                            text: "Message me now!",
+                          ),
+                          ActionBtn(
+                            color: Colors.redAccent,
+                            text: "Download Resume",
+                          ),
+                        ],
+                      ),
+                    )
+
+
+                  ],
                 ),
-                Expanded(
-                  child: VxResponsive(
-                    medium: IntroductionWidget()
-                        .pOnly(left: 120)
-                        .h(context.percentHeight * 60),
-                    large: IntroductionWidget()
-                        .pOnly(left: 120)
-                        .h(context.percentHeight * 60),
-                    fallback: const Offstage(),
-                  ),
-                )
-              ],
-            ).w(context.screenWidth)
-          ],
-        )
-      ]))
-          .size(context.screenWidth, context.percentHeight * 60)
-          .color(Coolors.secondaryColor)
-          .make(),
+              )
+          ),
+        ])
+      ],
     );
+  }
+}
+
+class ActionBtn extends StatelessWidget {
+  const ActionBtn({
+    Key? key,
+    this.color=Colors.black,
+    this.text=""
+  }) : super(key: key);
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(onPressed: (){
+
+    }, child:  Container(
+      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20)
+      ),
+      child:  Text(text,style: const TextStyle(color: Colors.white),),
+    ));
   }
 }
 
@@ -130,16 +161,51 @@ class PictureWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform(
+
+
+    return Stack(
+      children: [
+    Transform(
       alignment: Alignment.center,
       origin: Offset(context.percentWidth * 2, 0),
       transform: Matrix4.rotationY(pi),
       child: Image.asset(
         "assets/pic.png",
         fit: BoxFit.cover,
-        height: context.percentHeight * 60,
+        // width: double.infinity,
+        height: context.percentHeight * 70,
       ),
+    ),
+        Container(
+          height: context.percentHeight * 70,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter,
+                  colors: [
+                    Coolors.primaryColor.withOpacity(0.1),
+                    Coolors.primaryColor,
+                  ],
+                  stops: const [
+                    0.0,
+                    1
+                  ])),
+        ),
+      ],
     );
+    // return Transform(
+    //   alignment: Alignment.center,
+    //   origin: Offset(context.percentWidth * 2, 0),
+    //   transform: Matrix4.rotationY(pi),
+    //   child: Image.asset(
+    //     "assets/pic.png",
+    //     fit: BoxFit.cover,
+    //     height: context.percentHeight * 80,
+    //   ),
+    // );
   }
 }
 
